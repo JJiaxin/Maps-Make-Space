@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Change a map's style configuration property</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+<style>
+body { 
+    margin: 0; 
+    padding: 0; 
+}
+#map { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+
+}
+.marker {
+        background-image: url('palace.png');
+        background-size: cover;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+
+.mapboxgl-popup {
+    max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+</style>
+</head>
+<body>
+<style>
+    .map-overlay {
+        font:
+            12px/20px 'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
+        position: absolute;
+        width: 200px;
+        top: 0;
+        left: 0;
+        padding: 10px;
+    }
+    
+    
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+
+    .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    }
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .map-overlay-inner fieldset {
+        display: flex;
+        justify-content: space-between;
+        border: none;
+    }
+
+    .map-overlay-inner label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .map-overlay-inner .select-fieldset {
+        display: block;
+    }
+
+    .map-overlay-inner .select-fieldset label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .map-overlay-inner .select-fieldset select {
+        width: 100%;
+    }
+</style>
+
+<div id="map"></div>
+
+<div class="map-overlay top">
+    <div class="map-overlay-inner">
+        <fieldset class="select-fieldset">
+            <label>Select light preset</label>
+            <select id="lightPreset" name="lightPreset">
+                <!-- Each value matches a light preset -->
+                <option value="dawn" >Dawn</option>
+                <option value="day" >Day</option>
+                <option value="dusk"selected="">Dusk</option>
+                <option value="night">Night</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <label for="showPlaceLabels">Show place labels</label>
+            <input type="checkbox" id="showPlaceLabels" checked="">
+        </fieldset>
+        <fieldset>
+            <label for="showPointOfInterestLabels">Show POI labels</label>
+            <input type="checkbox" id="showPointOfInterestLabels" checked="">
+        </fieldset>
+        <fieldset>
+            <label for="showRoadLabels">Show road labels</label>
+            <input type="checkbox" id="showRoadLabels" checked="">
+        </fieldset>
+        <fieldset>
+            <label for="showTransitLabels">Show transit labels</label>
+            <input type="checkbox" id="showTransitLabels" checked="">
+        </fieldset>
+    </div>
+</div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic2hpbm9qeCIsImEiOiJjbHNzazQ4dTUwZXZ5MmxyeHgxaXl3d3V4In0.QXbvsqpJQeYlv7kB8YRzkg';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        center: [2.1204, 48.8049], // starting position [lng, lat]
+        zoom: 15.5, // starting zoom
+        pitch: 62, // starting pitch
+        bearing: -20 // starting bearing
+    });
+    const geojson = {
+        type: 'FeatureCollection',
+        features: [
+            {
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [2.1204, 48.8049]
+            },
+            properties: {
+                title: 'Palace of Versailles',
+                description: 'The Palace of Versailles was the principal residence of the French kings from the time of Louis XIV to Louis XVI. Embellished by several generations of architects, sculptors, decorators and landscape architects, it provided Europe with a model of the ideal royal residence for over a century.'
+            }
+            },
+            {
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [2.126001913809586, 48.80381089744105]
+            },
+            properties: {
+                title: 'Equestrian statue of Louis XIV',
+                description: 'The Equestrian Statue of King Louis XIV is a sculpture designed and partially executed by the Italian artist Gian Lorenzo Bernini, who was originally brought to France to design a new facade of the Louvre, a portrait bust, and an equestrian statue.'
+            }
+            },
+            {
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [2.1224828556536286, 48.8064112777910]
+            },
+            properties: {
+                title: 'Opéra Royal de Versailles',
+                description: 'The Royal Opera of Versailles is the main theatre and opera house of the Palace of Versailles. Designed by Ange-Jacques Gabriel, it is also known as the Théâtre Gabriel. The interior decoration by Augustin Pajou is constructed almost entirely of wood, painted to resemble marble in a technique known as faux marble.'
+            }
+            },
+            {
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [2.112902549465654, 48.80511124400589]
+            },
+            properties: {
+                title: 'Bassin de Saturne',
+                description: 'Entirely in symmetry with the Flora Fountain, the Saturn Fountain in the south of the gardens was sculpted by François Girardon and symbolises winter.'
+            }
+            }
+        ]
+        };
+
+    // add markers to map
+        for (const feature of geojson.features) {
+        // create a HTML element for each feature
+        const el = document.createElement('div');
+        el.className = 'marker';
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+            .setLngLat(feature.geometry.coordinates)
+            .setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML(
+            `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+        )
+        .addTo(map);
+}
+
+
+
+    map.on('style.load', () => {
+        map.addSource('line', {
+            type: 'geojson',
+            lineMetrics: true,
+            data: {
+                type: 'LineString',
+                coordinates: [
+                    [2.293389857555951, 48.85896319631851],
+                    [2.2890810326441624, 48.86174223718291]
+                ]
+            }
+        });
+    
+
+        map.addLayer({
+            id: 'line',
+            source: 'line',
+            type: 'line',
+            paint: {
+                'line-width': 12,
+                // The `*-emissive-strength` properties control the intensity of light emitted on the source features.
+                // To enhance the visibility of a line in darker light presets, increase the value of `line-emissive-strength`.
+                'line-emissive-strength': 0.8,
+                'line-gradient': [
+                    'interpolate',
+                    ['linear'],
+                    ['line-progress'],
+                    0,
+                    'red',
+                    1,
+                    'blue'
+                ]
+            }
+        });
+    });
+
+    document
+        .getElementById('lightPreset')
+        .addEventListener('change', function () {
+            map.setConfigProperty('basemap', 'lightPreset', this.value);
+        });
+
+    document
+        .querySelectorAll('.map-overlay-inner input[type="checkbox"]')
+        .forEach((checkbox) => {
+            checkbox.addEventListener('change', function () {
+                map.setConfigProperty('basemap', this.id, this.checked);
+            });
+        });
+</script>
+
+</body>
+</html>
